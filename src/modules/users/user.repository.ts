@@ -25,24 +25,24 @@ export class UserRepository implements OnModuleInit {
   }
 
   async getUsers() {
-    return await this.userMapper.findAll();
+    return await this.userMapper.findAll().then(result => result.toArray());
   }
 
   async getUserById(id: string) {
-    return await this.userMapper.find({ userId: id });
+    return await this.userMapper.find({ userId: id }).then(result => result.first());
   }
 
   async createUser(user: User) {
-    return await this.userMapper.insert(user);
+    return await this.userMapper.insert(user).then(() => user);
   }
 
   async updateUser(id: string, user: User) {
     const userToUpdate = new User();
     Object.assign(userToUpdate, user); // Copy properties from `user` to `userToUpdate`
-    return await this.userMapper.update(userToUpdate);
+    return await this.userMapper.update(userToUpdate).then(() => userToUpdate);
   }
 
   async deleteUser(id: string) {
-    return await this.userMapper.remove({ userId: id });
+    return await this.userMapper.remove({ userId: id }).then(() => null);
   }
 }
